@@ -1,0 +1,12 @@
+{
+  "description": "Sample transfer offer manifest fixture for interop tests",
+  "transfer_id": "11111111-1111-4111-8111-111111111111",
+  "total_bytes": 15,
+  "file_count": 2,
+  "root_name": "sample",
+  "entries": [
+    {"id": "d1", "type": "dir", "path": "sample/docs"},
+    {"id": "f1", "type": "file", "path": "sample/docs/hello.txt", "size": 12, "sha256": ""},
+    {"id": "f2", "type": "file", "path": "sample/readme.txt", "size": 3, "sha256": ""}
+  ]
+}

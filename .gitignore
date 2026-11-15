@@ -1,0 +1,71 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors / IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.swp
+*.swo
+*~
+
+# Xcode / Swift / SwiftPM
+**/.build/
+**/DerivedData/
+**/xcuserdata/
+**/*.xcuserstate
+**/*.xcscmblueprint
+**/*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+
+# Android / Gradle / Kotlin
+.gradle/
+**/build/
+!build/
+!build/**
+local.properties
+**/local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+!build/android/*.apk
+android/app/release/
+
+# Signing / secrets
+*.keystore
+*.jks
+*.pem
+*.p12
+*.mobileprovision
+keystore.properties
+.env
+.env.*
+
+# Logs / temp
+*.log
+*.tmp
+tmp/
+temp/
