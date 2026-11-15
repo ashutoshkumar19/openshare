@@ -39,6 +39,26 @@
             "target": "OpenShareMac",
             "configuration": "release",
             "preLaunchTask": "swift: Build Release OpenShareMac (superbeam/macos/SuperbeamMac)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:openshare}/macos/OpenShareMac",
+            "name": "Debug OpenShareMac (macos/OpenShareMac)",
+            "target": "OpenShareMac",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug OpenShareMac (macos/OpenShareMac)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:openshare}/macos/OpenShareMac",
+            "name": "Release OpenShareMac (macos/OpenShareMac)",
+            "target": "OpenShareMac",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release OpenShareMac (macos/OpenShareMac)"
         }
     ]
 }

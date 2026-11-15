@@ -11,6 +11,7 @@ OpenShare enables fast, private one-to-one transfers between nearby devices over
 ## Features
 
 - **Cross-platform:** Native macOS (Swift/SwiftUI) and Android (Kotlin/Jetpack Compose) apps
+- **Dark mode:** Both macOS and Android apps support light and dark mode based on the system theme
 - **Offline by design:** Transfers stay on the local network; no internet or cloud dependency
 - **Flexible connectivity:** Same Wi‑Fi discovery (mDNS/Bonjour + NSD) or hotspot host/join with QR bootstrap
 - **Receiver-controlled:** Incoming transfers require explicit acceptance and destination selection

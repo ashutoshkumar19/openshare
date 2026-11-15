@@ -44,6 +44,7 @@ Desktop.ini
 **/build/
 !build/
 !build/**
+android/app/build/
 local.properties
 **/local.properties
 captures/

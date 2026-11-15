@@ -103,63 +103,88 @@ fun OpenShareApp(vm: MainViewModel = viewModel()) {
     }
 
     OpenShareTheme {
-        Scaffold(containerColor = SBColors.Bg) { pad ->
-            Column(
+        val palette = LocalSBPalette.current
+        val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+        val statusBarColor = if (isDark) palette.bg else SBColors.Primary
+        val view = androidx.compose.ui.platform.LocalView.current
+        SideEffect {
+            val window = (view.context as? android.app.Activity)?.window ?: return@SideEffect
+            val insetsController = androidx.core.view.WindowInsetsControllerCompat(window, view)
+            insetsController.isAppearanceLightStatusBars = false
+            insetsController.isAppearanceLightNavigationBars = !isDark
+        }
+        Scaffold(
+            containerColor = palette.bg,
+            contentWindowInsets = WindowInsets(0)
+        ) { pad ->
+            Box(
                 Modifier
-                    .padding(pad)
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .padding(pad)
             ) {
-                HeroHeader(vm)
                 Column(
                     Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    QuickStartCard(
-                        vm = vm,
-                        hasRequiredPerms = hasAll(requiredStartPerms),
-                        onStart = { if (vm.running) vm.stop() else requestStartOrRun() },
-                        onOpenSettings = { openAppSettings(context) }
-                    )
-                    StatusCard(vm)
-
-                    if (vm.role == Role.SEND) {
-                        SendCard(vm,
-                            onPickFiles = { pickFiles.launch(arrayOf("*/*")) },
-                            onPickFolder = { pickSendFolder.launch(null) }
+                    HeroHeader(vm)
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .navigationBarsPadding()
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        QuickStartCard(
+                            vm = vm,
+                            hasRequiredPerms = hasAll(requiredStartPerms),
+                            onStart = { if (vm.running) vm.stop() else requestStartOrRun() },
+                            onOpenSettings = { openAppSettings(context) }
                         )
-                    }
+                        StatusCard(vm)
 
-                    vm.incomingOffer?.let { offer ->
-                        IncomingCard(offer,
-                            onAccept = { pendingAcceptAfterPick = true; pickReceiveFolder.launch(null) },
-                            onDecline = { vm.declineIncoming() }
+                        if (vm.role == Role.SEND) {
+                            SendCard(vm,
+                                onPickFiles = { pickFiles.launch(arrayOf("*/*")) },
+                                onPickFolder = { pickSendFolder.launch(null) }
+                            )
+                        }
+
+                        vm.incomingOffer?.let { offer ->
+                            IncomingCard(offer,
+                                onAccept = { pendingAcceptAfterPick = true; pickReceiveFolder.launch(null) },
+                                onDecline = { vm.declineIncoming() }
+                            )
+                        }
+
+                        if (vm.mode == Mode.SAME_WIFI) {
+                            if (vm.role == Role.SEND) PeersCard(vm)
+                            else SameWifiReceiveHint(vm)
+                        }
+
+                        if (vm.mode == Mode.HOTSPOT) {
+                            HotspotCard(vm, qrInput, { qrInput = it }, onScan = { showScanner = true })
+                        }
+
+                        if (vm.progressText.isNotBlank() || vm.progressTotal > 0 || vm.state == "transferring" || vm.state == "verifying") {
+                            ProgressCard(vm)
+                        }
+
+                        Text(
+                            "Offline Wi‑Fi sharing • Receiver must accept • One-to-one • Plain TCP (no TLS)",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = palette.muted,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
                         )
+                        Spacer(Modifier.height(8.dp))
                     }
-
-                    if (vm.mode == Mode.SAME_WIFI) {
-                        if (vm.role == Role.SEND) PeersCard(vm)
-                        else SameWifiReceiveHint(vm)
-                    }
-
-                    if (vm.mode == Mode.HOTSPOT) {
-                        HotspotCard(vm, qrInput, { qrInput = it }, onScan = { showScanner = true })
-                    }
-
-                    if (vm.progressText.isNotBlank() || vm.progressTotal > 0 || vm.state == "transferring" || vm.state == "verifying") {
-                        ProgressCard(vm)
-                    }
-
-                    Text(
-                        "Offline Wi‑Fi sharing • Receiver must accept • One-to-one • Plain TCP (no TLS)",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = SBColors.Muted,
-                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)
-                    )
-                    Spacer(Modifier.height(8.dp))
                 }
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .windowInsetsTopHeight(WindowInsets.statusBars)
+                        .background(statusBarColor)
+                )
             }
         }
     }
@@ -208,14 +233,18 @@ private fun contextPreflightMessage(context: Context, mode: Mode, role: Role): S
 
 @Composable
 private fun HeroHeader(vm: MainViewModel) {
+    val palette = LocalSBPalette.current
+    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val gradient = if (isDark) {
+        Brush.verticalGradient(listOf(palette.bg, palette.bg))
+    } else {
+        Brush.verticalGradient(listOf(SBColors.Primary, SBColors.PrimaryDark, palette.bg))
+    }
     Box(
         Modifier
             .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    listOf(SBColors.Primary, SBColors.PrimaryDark, SBColors.Bg)
-                )
-            )
+            .background(gradient)
+            .statusBarsPadding()
             .padding(horizontal = 20.dp, vertical = 22.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
