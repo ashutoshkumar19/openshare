@@ -77,19 +77,42 @@ Unsigned/ad-hoc test artifacts are included in the [`build/`](build/) directory:
 
 ## Build from Source
 
+Both platforms can be built in two ways:
+
+1. **Using the provided scripts** (recommended — builds, packages, and copies artifacts to `build/`):
+   ```bash
+   ./scripts/build-all.sh            # both platforms
+   ./scripts/package-macos-dmg.sh    # macOS only
+   ./scripts/build-android-apk.sh    # Android only
+   ```
+
+2. **Running the platform-specific commands manually** (see sections below).
+
+### Quick start (all platforms)
+
+```bash
+./scripts/build-all.sh
+```
+
+Outputs:
+- `build/macos/OpenShare-macOS-mvp-unsigned.dmg` (+ `.app`)
+- `build/android/OpenShare-android-debug.apk`
+- `build/android/OpenShare-android-release-unsigned.apk`
+
 ### macOS
 
-Build the release binary:
+**Option 1 — script:**
+
+```bash
+./scripts/package-macos-dmg.sh
+```
+
+**Option 2 — manual commands:**
 
 ```bash
 cd macos/OpenShareMac
 swift build -c release
-```
-
-Package the app and DMG (ad-hoc/unsigned, as scripted):
-
-```bash
-./scripts/package-macos-dmg.sh
+# then package into .app + .dmg as done by package-macos-dmg.sh
 ```
 
 **Outputs:** `build/macos/OpenShare.app`, `build/macos/OpenShare-macOS-mvp-unsigned.dmg`
@@ -99,6 +122,14 @@ Package the app and DMG (ad-hoc/unsigned, as scripted):
 
 ### Android
 
+**Option 1 — script (also copies APKs to `build/android/`):**
+
+```bash
+./scripts/build-android-apk.sh
+```
+
+**Option 2 — manual commands:**
+
 ```bash
 cd android
 ANDROID_HOME=/path/to/android/sdk ./gradlew assembleDebug assembleRelease
@@ -106,7 +137,7 @@ ANDROID_HOME=/path/to/android/sdk ./gradlew assembleDebug assembleRelease
 
 **Outputs:**
 - `android/app/build/outputs/apk/debug/app-debug.apk`
-- `android/app/build/outputs/apk/release/app-release-unsigned.apk`
+- `android/app/build/outputs/apk/release/app-release-unsigned.apk` (or `build/android/OpenShare-android-*.apk` when using the script)
 
 - Release distribution requires signing configuration and a keystore.
 - See [`android/README.md`](android/README.md) and [`scripts/build-android-apk.sh`](scripts/build-android-apk.sh).
@@ -122,7 +153,7 @@ ANDROID_HOME=/path/to/android/sdk ./gradlew assembleDebug assembleRelease
 | [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md) | Implementation status and remaining work |
 | [`docs/BUILD_AND_DELIVERABLES.md`](docs/BUILD_AND_DELIVERABLES.md) | Build and deliverables notes |
 | [`shared/fixtures/`](shared/fixtures/) | Sample manifest fixtures |
-| [`scripts/`](scripts/) | Packaging and build scripts |
+| [`scripts/`](scripts/) | Packaging and build scripts: `build-all.sh` (macOS + Android), `package-macos-dmg.sh`, `build-android-apk.sh` |
 | [`build/`](build/) | Prebuilt test artifacts (DMG/APKs) |
 
 ## Status
